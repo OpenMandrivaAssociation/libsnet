@@ -3,7 +3,7 @@
 
 Summary:	The libsnet library
 Name:		libsnet
-Version:	20060320
+Version:	20060523
 Release:	%mkrel 3
 License:	BSD
 Group:		System/Libraries
@@ -82,5 +82,3 @@ make OPTOPTS="%{optflags} -fPIC"
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/*.la
-
-
