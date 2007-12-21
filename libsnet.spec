@@ -15,6 +15,7 @@ BuildRequires:	automake1.7
 BuildRequires:	openssl-devel
 BuildRequires:	libsasl-devel
 BuildRequires:	zlib-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 %description
 The libsnet library
