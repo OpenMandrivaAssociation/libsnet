@@ -1,21 +1,23 @@
 %define	major 0
-%define libname	%mklibname snet %{major}
+%define libname %mklibname snet %{major}
+%define develname %mklibname snet -d
 
 Summary:	The libsnet library
 Name:		libsnet
-Version:	20060523
-Release:	%mkrel 3
+Version:	20070618
+Release:	%mkrel 1
 License:	BSD
 Group:		System/Libraries
 URL:		http://sourceforge.net/projects/libsnet
-Source0:	libsnet-%{version}.tar.bz2
+Source0:	libsnet-%{version}.tar.gz
+Patch0:		libsnet-makefile_fixes.diff
 BuildRequires:	libtool
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
 BuildRequires:	openssl-devel
 BuildRequires:	libsasl-devel
 BuildRequires:	zlib-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-root
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The libsnet library
@@ -27,19 +29,22 @@ Group:          System/Libraries
 %description -n	%{libname}
 The libsnet library
 
-%package -n	%{libname}-devel
+%package -n	%{develname}
 Summary:	Static library and header files for the libsnet library
 Group:		Development/C
-Provides:	libsnet-devel = %{version}
 Requires:	%{libname} = %{version}
+Provides:	snet-devel = %{version}-%{release}
+Provides:	libsnet-devel = %{version}-%{release}
+Obsoletes:	%{mklibname snet 0 -d}
 
-%description -n	%{libname}-devel
+%description -n	%{develname}
 This package contains the static libsnet library and its header
 files needed to compile applications such as radmind, nefu, etc.
 
 %prep
 
 %setup -q -n libsnet
+%patch0 -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -49,19 +54,28 @@ for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type 
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
+# lib64 fixes
+perl -pi -e "s|/lib\b|/%{_lib}|g" *
+
 %build
 #export WANT_AUTOCONF_2_5=1
 #rm -f configure
 #libtoolize --copy --force; aclocal-1.7; autoconf
 
+export OPTOPTS="%{optflags} -fPIC"
+export LIBS="-lcrypto -lssl -lsasl2 -lz"
+
 %configure2_5x \
     --enable-shared \
-    --enable-static 
+    --enable-static \
+    --with-zlib=%{_prefix} \
+    --with-ssl=%{_prefix} \
+    --with-sasl=%{_prefix}
 
-make OPTOPTS="%{optflags} -fPIC"
+make 
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %makeinstall
 
@@ -74,13 +88,13 @@ make OPTOPTS="%{optflags} -fPIC"
 %endif
 
 %clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr(-,root,root)
-%{_libdir}/*.so.*
+%attr(0755,root,root) %{_libdir}/*.so.*
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(-,root,root)
 %{_includedir}/*
 %{_libdir}/*.so
