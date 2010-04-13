@@ -5,7 +5,7 @@
 Summary:	The libsnet library
 Name:		libsnet
 Version:	20070618
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	BSD
 Group:		System/Libraries
 URL:		http://sourceforge.net/projects/libsnet
