@@ -5,7 +5,7 @@
 Summary:	The libsnet library
 Name:		libsnet
 Version:	20070618
-Release:	%mkrel 4
+Release:	%mkrel 5
 License:	BSD
 Group:		System/Libraries
 URL:		http://sourceforge.net/projects/libsnet
@@ -13,7 +13,7 @@ Source0:	libsnet-%{version}.tar.gz
 Patch0:		libsnet-makefile_fixes.diff
 BuildRequires:	libtool
 BuildRequires:	autoconf2.5
-BuildRequires:	automake1.7
+BuildRequires:	automake
 BuildRequires:	openssl-devel
 BuildRequires:	libsasl-devel
 BuildRequires:	zlib-devel
@@ -60,7 +60,7 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" *
 %build
 #export WANT_AUTOCONF_2_5=1
 #rm -f configure
-#libtoolize --copy --force; aclocal-1.7; autoconf
+#libtoolize --copy --force; aclocal; autoconf
 
 export OPTOPTS="%{optflags} -fPIC"
 export LIBS="-lcrypto -lssl -lsasl2 -lz"
