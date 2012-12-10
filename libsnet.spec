@@ -3,9 +3,9 @@
 %define develname %mklibname snet -d
 
 Summary:	The libsnet library
-Name:		libsnet
+Name:libsnet
 Version:	20070618
-Release:	%mkrel 5
+Release:	5
 License:	BSD
 Group:		System/Libraries
 URL:		http://sourceforge.net/projects/libsnet
@@ -14,10 +14,9 @@ Patch0:		libsnet-makefile_fixes.diff
 BuildRequires:	libtool
 BuildRequires:	autoconf2.5
 BuildRequires:	automake
-BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig(openssl)
 BuildRequires:	libsasl-devel
-BuildRequires:	zlib-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRequires:	pkgconfig(zlib)
 
 %description
 The libsnet library
@@ -58,10 +57,6 @@ done
 perl -pi -e "s|/lib\b|/%{_lib}|g" *
 
 %build
-#export WANT_AUTOCONF_2_5=1
-#rm -f configure
-#libtoolize --copy --force; aclocal; autoconf
-
 export OPTOPTS="%{optflags} -fPIC"
 export LIBS="-lcrypto -lssl -lsasl2 -lz"
 
@@ -74,9 +69,6 @@ export LIBS="-lcrypto -lssl -lsasl2 -lz"
 
 make 
 
-%install
-rm -rf %{buildroot}
-
 %makeinstall
 
 %if %mdkversion < 200900
@@ -86,17 +78,76 @@ rm -rf %{buildroot}
 %if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
 %endif
-
-%clean
-rm -rf %{buildroot}
+find $RPM_BUILD_ROOT/%{_libdir} -name '*.la' -exec rm {} \;
 
 %files -n %{libname}
-%defattr(-,root,root)
 %attr(0755,root,root) %{_libdir}/*.so.*
 
 %files -n %{develname}
-%defattr(-,root,root)
 %{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/*.a
-%{_libdir}/*.la
+
+
+
+%changelog
+* Mon Jan 03 2011 Oden Eriksson <oeriksson@mandriva.com> 20070618-5mdv2011.0
++ Revision: 627797
+- don't force the usage of automake1.7
+
+* Sun Dec 05 2010 Oden Eriksson <oeriksson@mandriva.com> 20070618-4mdv2011.0
++ Revision: 609778
+- rebuild
+
+* Tue Apr 13 2010 Funda Wang <fwang@mandriva.org> 20070618-3mdv2010.1
++ Revision: 533753
+- rebuild
+
+* Fri Sep 04 2009 Thierry Vignaud <tv@mandriva.org> 20070618-2mdv2010.0
++ Revision: 429831
+- rebuild
+
+* Fri Jul 11 2008 Oden Eriksson <oeriksson@mandriva.com> 20070618-1mdv2009.0
++ Revision: 233752
+- new'ish cvs snapshot
+- fix linkage and devel package naming
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+
+  + Olivier Blin <oblin@mandriva.com>
+    - restore BuildRoot
+
+* Mon Dec 17 2007 Thierry Vignaud <tv@mandriva.org> 20060523-3mdv2008.1
++ Revision: 129083
+- kill re-definition of %%buildroot on Pixel's request
+
+* Thu May 24 2007 Oden Eriksson <oeriksson@mandriva.com> 20060523-3mdv2008.0
++ Revision: 30705
+- new snap (20060523)
+
+
+* Sun Dec 10 2006 Oden Eriksson <oeriksson@mandriva.com> 20060320-3mdv2007.0
++ Revision: 94513
+- rebuild
+- Import libsnet
+
+* Fri Mar 24 2006 Oden Eriksson <oeriksson@mandriva.com> 20060320-2mdk
+- fix build
+
+* Fri Mar 24 2006 Oden Eriksson <oeriksson@mandriva.com> 20060320-1mdk
+- new snapshot (20060320)
+- fix naming
+- fix deps
+
+* Fri May 13 2005 Oden Eriksson <oeriksson@mandriva.com> 20041106-3mdk
+- fix naming
+- rpmlint fixes
+- fix build on x86_64
+
+* Sat Nov 06 2004 Oden Eriksson <oeriksson@mandrakesoft.com> 20041106-2mdk
+- update %%description for the devel package
+
+* Sat Nov 06 2004 Oden Eriksson <oeriksson@mandrakesoft.com> 20041106-1mdk
+- initial mandrake package
+
