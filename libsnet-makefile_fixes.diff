@@ -1,25 +1,25 @@
---- Makefile.in	2004-03-31 10:54:40.000000000 -0500
-+++ Makefile.in.oden	2008-07-11 07:47:24.000000000 -0400
-@@ -17,6 +17,8 @@
- CFLAGS=		${DEFS} ${OPTOPTS} ${INCPATH}
+diff -urN libsnet-1.0.0/Makefile.in libsnet-1.0.0-patched/Makefile.in
+--- libsnet-1.0.0/Makefile.in	2010-11-16 02:21:45.000000000 +1000
++++ libsnet-1.0.0-patched/Makefile.in	2014-03-13 00:01:02.438719167 +1100
+@@ -16,6 +16,7 @@
+ OPTOPTS=	@OPTOPTS@
+ CFLAGS=		${DEFS} ${OPTOPTS} ${INCPATH} @CFLAGS@
+ LDFLAGS=	@LDFLAGS@
++LIBS=		@LIBS@
  PROFILED=	@PROFILED@
  CC=		@CC@	
-+LDFLAGS=	@LDFLAGS@
-+LIBS=		@LIBS@
  
- INSTALL=	@INSTALL@
- AWK=		@AWK@
-@@ -50,11 +52,11 @@
+@@ -51,11 +52,11 @@
  
  libsnet.la:	$(OBJ) $(LOBJ)
  	$(LIBTOOL) --mode=link \
--	  $(CC) -o libsnet.la $(LOBJ) -rpath $(libdir) -version-info 0:0:0
-+	  $(CC) -o libsnet.la $(LOBJ) -rpath $(libdir) -version-info 0:0:0 $(LDFLAGS) $(LIBS)
+-	  $(CC) -o libsnet.la $(LDFLAGS) $(LOBJ) -rpath $(libdir) -version-info 0:0:0
++	  $(CC) -o libsnet.la $(LDFLAGS) $(LOBJ) -rpath $(libdir) -version-info 0:0:0 $(LIBS)
  	@if test x_$(PROFILED) = x_true ; then echo "building profiled $@" ; \
  	  ( cd profiled ; ../$(LIBTOOL) --mode=link \
- 	  $(CC) -o libsnet_p.la $(LOBJ) -rpath $(libdir) \
+ 	  $(CC) -o libsnet_p.la $(LDFLAGS) $(LOBJ) -rpath $(libdir) \
 -	  -version-info 0:0:0 >/dev/null 2>&1 ) ; fi
-+	  -version-info 0:0:0 $(LDFLAGS) $(LIBS) >/dev/null 2>&1 ) ; fi
++	  -version-info 0:0:0 $(LIBS) >/dev/null 2>&1 ) ; fi
  
  install:	all
  	mkdir -p $(libdir)
