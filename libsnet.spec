@@ -6,7 +6,7 @@
 Summary:	The libsnet library
 Name:		libsnet
 Version:	1.0.0
-Release:	1
+Release:	2
 Epoch:		1
 License:	BSD
 Group:		System/Libraries
