@@ -10,7 +10,7 @@ Release:	2
 Epoch:		1
 License:	BSD
 Group:		System/Libraries
-Url:		http://sourceforge.net/projects/libsnet
+Url:		https://sourceforge.net/projects/libsnet
 Source0:	%{name}-%{version}.tar.gz
 Patch0:		libsnet-makefile_fixes.diff
 BuildRequires:	sasl-devel
